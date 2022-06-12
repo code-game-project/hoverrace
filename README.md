@@ -39,7 +39,7 @@ docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/ho
 
 1. Send a `ready` event to the server when you think the game should begin.
 2. The `ready_players` event updates all players on the readiness of all players.
-3. The `checkpoints` event contains the checkpoints you have to reach.
+3. The `checkpoints` event contains all checkpoints and the finish line position.
 4. The `countdown` event counts down 5 seconds.
 5. The `start` event is sent to all players when the race begins.
 6. Send a `throttle` event to begin moving.

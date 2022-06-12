@@ -14,7 +14,9 @@ event countdown {
 // The `checkpoints` event contains all of the remaining checkpoints.
 event checkpoints {
 	// The positions of all the remaining checkpoints.
-	checkpoints: list<position>
+	checkpoints: list<vec>,
+	// The position of the finish line.
+	finish_line: vec
 }
 
 // Send the `ready` event to the server when you think the game should begin.
@@ -54,9 +56,11 @@ event finished {
 // A hovercraft is a circle with a diameter of 1 unit.
 type hovercraft {
 	// The position of the center of the hovercraft.
-	pos: position,
-	// The current speed of the hovercraft.
-	speed: float,
+	pos: vec,
+	// The current velocity of the hovercraft.
+	velocity: vec,
+	// The current throttle of the hovercraft.
+	throttle: float64,
 	// The angle in degrees the hovercraft is facing (up = 0°).
 	angle: float,
 	// The amount of reached checkpoints.
@@ -64,7 +68,8 @@ type hovercraft {
 }
 
 // One unit equals the width of the hovercrafts and checkpoints.
-type position {
+// The origin is in the bottom left corner.
+type vec {
 	x: float,
 	y: float
 }

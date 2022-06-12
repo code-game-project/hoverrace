@@ -22,7 +22,9 @@ const CheckpointsEvent cg.EventName = "checkpoints"
 
 type CheckpointsEventData struct {
 	// The positions of all the remaining checkpoints.
-	Checkpoints []Position `json:"checkpoints"`
+	Checkpoints []Vec `json:"checkpoints"`
+	// The position of the finish line.
+	FinishLine Vec `json:"finish_line"`
 }
 
 // Send the `ready` event to the server when you think the game should begin.
@@ -73,9 +75,11 @@ type FinishedEventData struct {
 // A hovercraft is a circle with a diameter of 1 unit.
 type Hovercraft struct {
 	// The position of the center of the hovercraft.
-	Pos Position `json:"pos"`
-	// The current speed of the hovercraft.
-	Speed float64 `json:"speed"`
+	Pos Vec `json:"pos"`
+	// The current velocity of the hovercraft.
+	Velocity Vec `json:"velocity"`
+	// The current throttle of the hovercraft.
+	Throttle float64 `json:"throttle"`
 	// The angle in degrees the hovercraft is facing (up = 0°).
 	Angle float64 `json:"angle"`
 	// The amount of reached checkpoints.
@@ -83,7 +87,8 @@ type Hovercraft struct {
 }
 
 // One unit equals the width of the hovercrafts and checkpoints.
-type Position struct {
+// The origin is in the bottom left corner.
+type Vec struct {
 	X float64 `json:"x"`
 	Y float64 `json:"y"`
 }
