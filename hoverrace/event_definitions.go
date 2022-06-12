@@ -7,7 +7,21 @@ import "github.com/code-game-project/go-server/cg"
 const StartEvent cg.EventName = "start"
 
 type StartEventData struct {
-	// The positions of all checkpoints.
+}
+
+// The `countdown` counts down from 5. When the value reaches 0 a `start` event will be sent instead of the `countdown` event.
+const CountdownEvent cg.EventName = "countdown"
+
+type CountdownEventData struct {
+	// The current value of the countdown (5-1).
+	Value int `json:"value"`
+}
+
+// The `checkpoints` event contains all of the remaining checkpoints.
+const CheckpointsEvent cg.EventName = "checkpoints"
+
+type CheckpointsEventData struct {
+	// The positions of all the remaining checkpoints.
 	Checkpoints []Position `json:"checkpoints"`
 }
 
@@ -42,37 +56,33 @@ const HovercraftsEvent cg.EventName = "hovercrafts"
 type HovercraftsEventData struct {
 	// All hovercrafts mapped to their respective player IDs.
 	Hovercrafts map[string]Hovercraft `json:"hovercrafts"`
-	// The time in UNIX seconds when this event occured.
+	// The time in UNIX milliseconds when this event occured.
 	Time int64 `json:"time"`
-}
-
-// The `next_checkpoint` tells you the position of the next checkpoint.
-const NextCheckpointEvent cg.EventName = "next_checkpoint"
-
-type NextCheckpointEventData struct {
-	// The position of the next checkpoint.
-	Pos Position `json:"pos"`
 }
 
 // The `finished` event is sent when a player crosses the finish line.
 const FinishedEvent cg.EventName = "finished"
 
 type FinishedEventData struct {
-	// The ID of the player who reached the finish line.
-	Player string `json:"player"`
 	// The place which the player has reached.
 	Place int `json:"place"`
+	// The amount of time in milliseconds the player needed to finish the race.
+	Duration int64 `json:"duration"`
 }
 
+// A hovercraft is a circle with a diameter of 1 unit.
 type Hovercraft struct {
-	// The position of the hovercraft.
+	// The position of the center of the hovercraft.
 	Pos Position `json:"pos"`
 	// The current speed of the hovercraft.
 	Speed float64 `json:"speed"`
 	// The angle in degrees the hovercraft is facing (up = 0°).
 	Angle float64 `json:"angle"`
+	// The amount of reached checkpoints.
+	Checkpoints int `json:"checkpoints"`
 }
 
+// One unit equals the width of the hovercrafts and checkpoints.
 type Position struct {
 	X float64 `json:"x"`
 	Y float64 `json:"y"`

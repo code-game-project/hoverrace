@@ -38,13 +38,15 @@ docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/ho
 ## Event Flow
 
 1. Send a `ready` event to the server when you think the game should begin.
-2. A `ready_players` event updates all players on the readiness of all players.
-3. A `start` event is sent to all players when the race begins. It includes the positions of all checkpoints.
-4. A `next_checkpoint` event is sent to every player to tell them where their next target is located.
-5. Send a `throttle` event to begin moving.
-6. A `hovercrafts` event is sent repeatedly to all players to update them on the state of all hovercrafts.
-7. A `finished` event is sent to all players when a player crosses the finish line. The game keeps going until all players have finished.
-8. Send a `ready` event if you want to play again.
+2. The `ready_players` event updates all players on the readiness of all players.
+3. The `checkpoints` event contains the checkpoints you have to reach.
+4. The `countdown` event counts down 5 seconds.
+5. The `start` event is sent to all players when the race begins.
+6. Send a `throttle` event to begin moving.
+7. The `hovercrafts` event is sent repeatedly to all players to update them on the state of all hovercrafts.
+8. The `checkpoints` event is sent again when you cross a checkpoint.
+9. The `finished` event is sent to all players when a player crosses the finish line. The game keeps going until all players have finished.
+10. Send a `ready` event if you want to play again.
 
 ## Building
 

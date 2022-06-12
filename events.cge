@@ -3,8 +3,17 @@ version 0.3
 
 // The `start` event is sent when the race begins.
 // The game begins once at least 2 players have joined and all players have sent the `ready` event.
-event start {
-	// The positions of all checkpoints.
+event start {}
+
+// The `countdown` counts down from 5. When the value reaches 0 a `start` event will be sent instead of the `countdown` event.
+event countdown {
+	// The current value of the countdown (5-1).
+	value: int
+}
+
+// The `checkpoints` event contains all of the remaining checkpoints.
+event checkpoints {
+	// The positions of all the remaining checkpoints.
 	checkpoints: list<position>
 }
 
@@ -30,33 +39,31 @@ event throttle {
 event hovercrafts {
 	// All hovercrafts mapped to their respective player IDs.
 	hovercrafts: map<hovercraft>,
-	// The time in UNIX seconds when this event occured.
+	// The time in UNIX milliseconds when this event occured.
 	time: int64
-}
-
-// The `next_checkpoint` tells you the position of the next checkpoint.
-event next_checkpoint {
-	// The position of the next checkpoint.
-	pos: position
 }
 
 // The `finished` event is sent when a player crosses the finish line.
 event finished {
-	// The ID of the player who reached the finish line.
-	player: string,
 	// The place which the player has reached.
-	place: int
+	place: int,
+	// The amount of time in milliseconds the player needed to finish the race.
+	duration: int64
 }
 
+// A hovercraft is a circle with a diameter of 1 unit.
 type hovercraft {
-	// The position of the hovercraft.
+	// The position of the center of the hovercraft.
 	pos: position,
 	// The current speed of the hovercraft.
 	speed: float,
 	// The angle in degrees the hovercraft is facing (up = 0°).
-	angle: float
+	angle: float,
+	// The amount of reached checkpoints.
+	checkpoints: int
 }
 
+// One unit equals the width of the hovercrafts and checkpoints.
 type position {
 	x: float,
 	y: float
