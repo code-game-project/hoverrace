@@ -1,0 +1,63 @@
+name hoverrace
+version 0.3
+
+// The `start` event is sent when the race begins.
+// The game begins once at least 2 players have joined and all players have sent the `ready` event.
+event start {
+	// The positions of all checkpoints.
+	checkpoints: list<position>
+}
+
+// Send the `ready` event to the server when you think the game should begin.
+event ready {}
+
+// The `ready_players` event contains a list of all players which are ready.
+event ready_players {
+	// A list of all ready players.
+	players: list<string>
+}
+
+// The `throttle` event allows you to change your throttle level and direction.
+// **NOTE:** This values are targets. The hovercraft needs some time to reach the desired values.
+event throttle {
+	// Throttle level between 0-1.
+	level: float,
+	// The angle in degrees the hovercraft should be facing (up = 0°).
+	angle: float
+}
+
+// The `hovercraft` event tells all clients where all the hovercrafts are and how they are moving.
+event hovercrafts {
+	// All hovercrafts mapped to their respective player IDs.
+	hovercrafts: map<hovercraft>,
+	// The time in UNIX seconds when this event occured.
+	time: int64
+}
+
+// The `next_checkpoint` tells you the position of the next checkpoint.
+event next_checkpoint {
+	// The position of the next checkpoint.
+	pos: position
+}
+
+// The `finished` event is sent when a player crosses the finish line.
+event finished {
+	// The ID of the player who reached the finish line.
+	player: string,
+	// The place which the player has reached.
+	place: int
+}
+
+type hovercraft {
+	// The position of the hovercraft.
+	pos: position,
+	// The current speed of the hovercraft.
+	speed: float,
+	// The angle in degrees the hovercraft is facing (up = 0°).
+	angle: float
+}
+
+type position {
+	x: float,
+	y: float
+}
