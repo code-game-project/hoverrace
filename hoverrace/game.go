@@ -178,8 +178,8 @@ func (g *Game) handleThrottle(playerId string, event cg.Event) {
 
 	if data.Level > 1 {
 		data.Level = 1
-	} else if data.Level < 0 {
-		data.Level = 0
+	} else if data.Level < -1 {
+		data.Level = -1
 	}
 
 	player := g.players[playerId]

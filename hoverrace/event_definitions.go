@@ -42,11 +42,11 @@ type ReadyPlayersEventData struct {
 }
 
 // The `throttle` event allows you to change your throttle level and direction.
-// **NOTE:** This values are targets. The hovercraft needs some time to reach the desired values.
+// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
 const ThrottleEvent cg.EventName = "throttle"
 
 type ThrottleEventData struct {
-	// Throttle level between 0-1.
+	// Throttle level between -1 - 1.
 	Level float64 `json:"level"`
 	// The angle in degrees the hovercraft should be facing (up = 0°).
 	Angle float64 `json:"angle"`
@@ -87,8 +87,9 @@ type Hovercraft struct {
 }
 
 // One unit equals the width of the hovercrafts and checkpoints.
-// The origin is in the bottom left corner.
 type Vec struct {
+	// left to right
 	X float64 `json:"x"`
+	// bottom to top
 	Y float64 `json:"y"`
 }
