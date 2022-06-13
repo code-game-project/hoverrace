@@ -29,7 +29,7 @@ event ready_players {
 }
 
 // The `throttle` event allows you to change your throttle level and direction.
-// **NOTE:** This values are targets. The hovercraft needs some time to reach the desired values.
+// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
 event throttle {
 	// Throttle level between 0-1.
 	level: float,
