@@ -45,7 +45,12 @@ func (g *Game) Run() {
 		}
 		g.update(deltaTime)
 		time.Sleep(targetFrameTime - time.Now().Sub(frameStart))
+
 		deltaTime = time.Now().Sub(frameStart)
+		// waited for countdown
+		if deltaTime >= 5*time.Second {
+			deltaTime = targetFrameTime
+		}
 	}
 }
 
@@ -164,6 +169,10 @@ func (g *Game) handleReady(playerId string) {
 }
 
 func (g *Game) handleThrottle(playerId string, event cg.Event) {
+	if !g.running {
+		return
+	}
+
 	var data ThrottleEventData
 	event.UnmarshalData(&data)
 
@@ -185,6 +194,13 @@ func (g *Game) start() {
 	x := 0.0
 	i := 0
 	for _, player := range g.players {
+		player.vel = Vec{}
+		player.acc = Vec{}
+		player.angle = 0
+		player.targetAngle = 0
+		player.throttle = 0
+		player.targetThrottle = 0
+
 		player.finished = false
 		player.checkpoints = make([]Vec, len(g.checkpoints))
 		copy(player.checkpoints, g.checkpoints)
@@ -200,6 +216,8 @@ func (g *Game) start() {
 		x += 1.5
 		i++
 	}
+
+	g.update(0)
 
 	g.cg.Send("server", CheckpointsEvent, CheckpointsEventData{
 		Checkpoints: g.checkpoints,
@@ -230,12 +248,14 @@ func (g *Game) createCheckpoints() {
 	// TODO: randomly generate checkpoint positions
 
 	g.checkpoints = []Vec{
-		{X: 10, Y: 5},
-		{X: 10, Y: 12},
+		{X: -15, Y: 15},
+		{X: -15, Y: -15},
+		{X: 15, Y: 15},
+		{X: 15, Y: -15},
 	}
 
 	g.finishLine = Vec{
-		X: 10,
-		Y: 20,
+		X: 0,
+		Y: 0,
 	}
 }

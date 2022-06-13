@@ -8,7 +8,7 @@ import (
 )
 
 const throttleSpeed = 1
-const turnSpeed = 120
+const turnSpeed = 220
 const maxAcceleration = 5
 const maxVelocity = 20
 
@@ -52,7 +52,7 @@ func (p *Player) update(delta time.Duration) {
 }
 
 func (p *Player) move(delta time.Duration) {
-	if !p.finished {
+	if !p.finished && p.game.running {
 		if p.targetThrottle > p.throttle {
 			p.throttle += throttleSpeed * delta.Seconds()
 			if p.throttle > p.targetThrottle {
