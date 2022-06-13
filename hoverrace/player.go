@@ -83,10 +83,11 @@ func (p *Player) move(delta time.Duration) {
 
 		if p.vel.MagnitudeSquared() != 0 {
 			velMag := p.vel.Magnitude()
+
 			p.acc = Vec{
 				X: -p.vel.X / velMag,
 				Y: -p.vel.Y / velMag,
-			}.Mul(math.Max(maxAcceleration, math.Abs(velMag)))
+			}.Mul(math.Min(maxAcceleration, math.Abs(velMag)))
 		}
 
 		if p.vel.MagnitudeSquared() < 0.01 {
@@ -101,7 +102,7 @@ func (p *Player) move(delta time.Duration) {
 }
 
 func (p *Player) checkCollisions() {
-	if p.finished {
+	if !p.game.running || p.finished {
 		return
 	}
 
@@ -139,9 +140,4 @@ outer:
 			p.game.finish()
 		}
 	}
-}
-
-func (p *Player) reset() {
-	p.ready = false
-	p.finished = false
 }

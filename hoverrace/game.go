@@ -113,10 +113,6 @@ func (g *Game) onPlayerSocketConnected(player *cg.Player, socket *cg.Socket) {
 }
 
 func (g *Game) update(delta time.Duration) {
-	if !g.running {
-		return
-	}
-
 	for _, player := range g.players {
 		player.update(delta)
 	}
@@ -150,10 +146,6 @@ func (g *Game) handleReady(playerId string) {
 	}
 
 	player.ready = true
-
-	if len(g.players) < 2 {
-		return
-	}
 
 	readyPlayers := make([]string, 0, len(g.players))
 	for _, p := range g.players {
@@ -190,14 +182,23 @@ func (g *Game) start() {
 	g.finishedPlayers = 0
 	g.createCheckpoints()
 
+	x := 0.0
+	i := 0
 	for _, player := range g.players {
+		player.finished = false
 		player.checkpoints = make([]Vec, len(g.checkpoints))
 		copy(player.checkpoints, g.checkpoints)
 
 		player.pos = Vec{
-			X: 10,
-			Y: 1,
+			X: x,
+			Y: 0,
 		}
+		if i%2 != 0 {
+			player.pos.X = -x
+		}
+
+		x += 1.5
+		i++
 	}
 
 	g.cg.Send("server", CheckpointsEvent, CheckpointsEventData{
@@ -220,7 +221,7 @@ func (g *Game) start() {
 
 func (g *Game) finish() {
 	for _, player := range g.players {
-		player.reset()
+		player.ready = false
 	}
 	g.running = false
 }

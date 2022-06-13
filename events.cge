@@ -68,8 +68,9 @@ type hovercraft {
 }
 
 // One unit equals the width of the hovercrafts and checkpoints.
-// The origin is in the bottom left corner.
 type vec {
+	// left to right
 	x: float,
+	// bottom to top
 	y: float
 }
