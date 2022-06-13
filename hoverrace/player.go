@@ -7,11 +7,10 @@ import (
 	"github.com/code-game-project/go-server/cg"
 )
 
-// TODO: tweak these values
 const throttleSpeed = 1
-const turnSpeed = 60
+const turnSpeed = 120
 const maxAcceleration = 5
-const maxVelocity = 30
+const maxVelocity = 20
 
 type Player struct {
 	id       string

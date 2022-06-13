@@ -42,7 +42,7 @@ func (v Vec) MagnitudeSquared() float64 {
 func VecFromAngle(degrees float64) Vec {
 	radians := ToRadians(degrees + 90)
 	return Vec{
-		X: math.Cos(radians),
+		X: -math.Cos(radians),
 		Y: math.Sin(radians),
 	}
 }
