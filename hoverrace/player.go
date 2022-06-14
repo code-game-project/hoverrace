@@ -39,18 +39,20 @@ type Player struct {
 }
 
 func (p *Player) update(delta time.Duration) {
-	diff := AngleDifference(p.angle, p.targetAngle)
-	p.targetAngle = p.angle + diff
+	if p.cg.SocketCount() > 0 {
+		diff := AngleDifference(p.angle, p.targetAngle)
+		p.targetAngle = p.angle + diff
 
-	p.move(delta)
-	p.checkCollisions()
+		p.move(delta)
+		p.checkCollisions()
 
-	p.game.hovercrafts[p.id] = Hovercraft{
-		Pos:         p.pos,
-		Checkpoints: len(p.checkpoints),
-		Velocity:    p.vel,
-		Throttle:    p.throttle,
-		Angle:       p.angle,
+		p.game.hovercrafts[p.id] = Hovercraft{
+			Pos:         p.pos,
+			Checkpoints: len(p.checkpoints),
+			Velocity:    p.vel,
+			Throttle:    p.throttle,
+			Angle:       p.angle,
+		}
 	}
 }
 
