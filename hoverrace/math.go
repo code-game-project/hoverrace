@@ -31,6 +31,10 @@ func (v Vec) Normalize() Vec {
 	}
 }
 
+func (v Vec) ToAngle() float64 {
+	return math.Atan2(-v.Y, v.X)*180/math.Pi + 90
+}
+
 func (v Vec) Magnitude() float64 {
 	return math.Sqrt(v.MagnitudeSquared())
 }
@@ -47,10 +51,30 @@ func VecFromAngle(degrees float64) Vec {
 	}
 }
 
+func (v Vec) AngleTo(other Vec) float64 {
+	return NormalizeAngle((v.ToAngle() - other.ToAngle()))
+}
+
 func ToRadians(degrees float64) float64 {
 	return degrees * (math.Pi / 180)
 }
 
 func ToDegrees(radians float64) float64 {
 	return radians * (180 / math.Pi)
+}
+
+func NormalizeAngle(degrees float64) float64 {
+	angle := math.Mod(math.Mod(degrees, 360)+360, 360)
+	if angle > 180 {
+		angle = -(360 - angle)
+	}
+	return angle
+}
+
+func AngleDifference(a, b float64) float64 {
+	diff := math.Mod((b-a+180), 360) - 180
+	if diff < -180 {
+		diff += 360
+	}
+	return diff
 }

@@ -182,6 +182,8 @@ func (g *Game) handleThrottle(playerId string, event cg.Event) {
 		data.Level = -1
 	}
 
+	data.Angle = NormalizeAngle(data.Angle)
+
 	player := g.players[playerId]
 	player.targetThrottle = data.Level
 	player.targetAngle = data.Angle

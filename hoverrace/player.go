@@ -39,6 +39,9 @@ type Player struct {
 }
 
 func (p *Player) update(delta time.Duration) {
+	diff := AngleDifference(p.angle, p.targetAngle)
+	p.targetAngle = p.angle + diff
+
 	p.move(delta)
 	p.checkCollisions()
 
