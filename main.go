@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -11,6 +12,7 @@ import (
 )
 
 func main() {
+	rand.Seed(time.Now().UnixMilli())
 	var port int
 	pflag.IntVarP(&port, "port", "p", 0, "The network port of the game server.")
 	pflag.Parse()

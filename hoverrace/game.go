@@ -2,6 +2,7 @@ package hoverrace
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/code-game-project/go-server/cg"
@@ -247,6 +248,7 @@ func (g *Game) start() {
 		player.checkpoints = make([]Vec, len(g.checkpoints))
 		copy(player.checkpoints, g.checkpoints)
 	}
+	g.positionHovercrafts()
 
 	g.update(0)
 
@@ -290,17 +292,17 @@ func (g *Game) finish() {
 }
 
 func (g *Game) createCheckpoints() {
-	// TODO: randomly generate checkpoint positions
+	g.checkpoints = make([]Vec, 10)
 
-	g.checkpoints = []Vec{
-		{X: -15, Y: 15},
-		{X: -15, Y: -15},
-		{X: 15, Y: 15},
-		{X: 15, Y: -15},
+	for i := range g.checkpoints {
+		g.checkpoints[i] = Vec{
+			X: rand.Float64()*50*2 - 50,
+			Y: rand.Float64()*50*2 - 50,
+		}
 	}
 
 	g.finishLine = Vec{
-		X: 0,
-		Y: 0,
+		X: rand.Float64()*50*2 - 50,
+		Y: rand.Float64()*50*2 - 50,
 	}
 }
