@@ -69,6 +69,7 @@ func (g *Game) onPlayerJoined(cgPlayer *cg.Player) {
 		cg:       cgPlayer,
 		username: cgPlayer.Username,
 		game:     g,
+		finished: true,
 	}
 
 	g.hovercrafts[cgPlayer.Id] = Hovercraft{}
@@ -180,7 +181,7 @@ func (g *Game) handleEvent(player *cg.Player, event cg.Event) {
 
 func (g *Game) handleReady(playerId string) {
 	player := g.players[playerId]
-	if g.running {
+	if !player.finished {
 		player.cg.Send(playerId, cg.ErrorEvent, cg.ErrorEventData{
 			Message: "the game has already begun",
 		})
@@ -233,6 +234,7 @@ func (g *Game) start() {
 	x := 0.0
 	i := 0
 	for _, player := range g.players {
+		player.ready = false
 		player.vel = Vec{}
 		player.acc = Vec{}
 		player.angle = 0
@@ -277,9 +279,6 @@ func (g *Game) start() {
 }
 
 func (g *Game) finish() {
-	for _, player := range g.players {
-		player.ready = false
-	}
 	g.running = false
 }
 
