@@ -73,6 +73,8 @@ func (g *Game) onPlayerJoined(cgPlayer *cg.Player) {
 	}
 
 	g.hovercrafts[cgPlayer.Id] = Hovercraft{}
+
+	g.positionHovercrafts()
 }
 
 func (g *Game) onPlayerLeft(player *cg.Player) {
@@ -82,6 +84,7 @@ func (g *Game) onPlayerLeft(player *cg.Player) {
 	}
 
 	if !g.running {
+		g.positionHovercrafts()
 		for _, p := range g.players {
 			if !p.ready {
 				return
@@ -231,8 +234,6 @@ func (g *Game) start() {
 	g.finishedPlayers = 0
 	g.createCheckpoints()
 
-	x := 0.0
-	i := 0
 	for _, player := range g.players {
 		player.ready = false
 		player.vel = Vec{}
@@ -245,17 +246,6 @@ func (g *Game) start() {
 		player.finished = false
 		player.checkpoints = make([]Vec, len(g.checkpoints))
 		copy(player.checkpoints, g.checkpoints)
-
-		player.pos = Vec{
-			X: x,
-			Y: 0,
-		}
-		if i%2 != 0 {
-			player.pos.X = -x
-		}
-
-		x += 1.5
-		i++
 	}
 
 	g.update(0)
@@ -276,6 +266,23 @@ func (g *Game) start() {
 	g.startTime = time.Now()
 
 	g.cg.Send("server", StartEvent, StartEventData{})
+}
+
+func (g *Game) positionHovercrafts() {
+	x := 0.0
+	i := 0
+	for _, player := range g.players {
+		player.pos = Vec{
+			X: x,
+			Y: 0,
+		}
+		if i%2 != 0 {
+			player.pos.X = -x
+		} else {
+			x += 1.5
+		}
+		i++
+	}
 }
 
 func (g *Game) finish() {
