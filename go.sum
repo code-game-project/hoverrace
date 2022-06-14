@@ -2,6 +2,8 @@ github.com/Bananenpro/log v0.0.0-20220531131028-71d66f5df6ae h1:3soztN/rE1IKMZse
 github.com/Bananenpro/log v0.0.0-20220531131028-71d66f5df6ae/go.mod h1:deSMMVnGJzim4MopRkA5zp+QJ5I0p+Fg3iBD2edIZpU=
 github.com/code-game-project/go-server v0.7.3 h1:XX9xZo/61LaZDGmsSkezDFm+3Gzaeyb9wOFVfUPXTTM=
 github.com/code-game-project/go-server v0.7.3/go.mod h1:j4KyFRZe/rjT14UOXIZwYmN9/vBtqGEYubOtZ4kcoFM=
+github.com/code-game-project/go-server v0.8.0 h1:Ir4zCT5RSpn8XwHhwjjaVQgw9OLTn0Ao8OWOU7i4AYA=
+github.com/code-game-project/go-server v0.8.0/go.mod h1:j4KyFRZe/rjT14UOXIZwYmN9/vBtqGEYubOtZ4kcoFM=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
