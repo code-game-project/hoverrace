@@ -2,6 +2,10 @@ github.com/Bananenpro/log v0.0.0-20220531131028-71d66f5df6ae h1:3soztN/rE1IKMZse
 github.com/Bananenpro/log v0.0.0-20220531131028-71d66f5df6ae/go.mod h1:deSMMVnGJzim4MopRkA5zp+QJ5I0p+Fg3iBD2edIZpU=
 github.com/code-game-project/go-server v0.8.1 h1:gHMhi3J8JKKoqLAH5Woje+/XLDKZ7l0lUXvnTQheuLU=
 github.com/code-game-project/go-server v0.8.1/go.mod h1:j4KyFRZe/rjT14UOXIZwYmN9/vBtqGEYubOtZ4kcoFM=
+github.com/code-game-project/go-server v0.8.2 h1:s4lN6UGrHIhN14c8x2PyW91eu1Jtqh+zHH0NBnBuVso=
+github.com/code-game-project/go-server v0.8.2/go.mod h1:j4KyFRZe/rjT14UOXIZwYmN9/vBtqGEYubOtZ4kcoFM=
+github.com/code-game-project/go-server v0.8.3 h1:BG5Um+5GckmUd1sPfA6bJoccHFs+nb0FK6O4qUEdL9o=
+github.com/code-game-project/go-server v0.8.3/go.mod h1:j4KyFRZe/rjT14UOXIZwYmN9/vBtqGEYubOtZ4kcoFM=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
@@ -20,3 +24,5 @@ golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d h1:Zu/JngovGLVi6t2J3nmAf3AoTDwuzw85YZ3b9o4yU7s=
 golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220614162138-6c1b26c55098 h1:PgOr27OhUx2IRqGJ2RxAWI4dJQ7bi9cSrB82uzFzfUA=
+golang.org/x/sys v0.0.0-20220614162138-6c1b26c55098/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
