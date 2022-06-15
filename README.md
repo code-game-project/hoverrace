@@ -29,10 +29,10 @@ Prerequisites:
 
 ```sh
 # Download image
-docker pull codegameproject/hoverrace:0.1
+docker pull codegameproject/hoverrace:0.2
 
 # Run container
-docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/hoverrace:0.1
+docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/hoverrace:0.2
 ```
 
 ## Event Flow
@@ -45,7 +45,7 @@ docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/ho
 6. Send a `throttle` event to begin moving.
 7. The `hovercrafts` event is sent repeatedly to all players to update them on the state of all hovercrafts.
 8. The `checkpoints` event is sent again when you cross a checkpoint.
-9. The `finished` event is sent to all players when a player crosses the finish line. The game keeps going until all players have finished.
+9. The `finished_players` event is sent to all players when a player crosses the finish line. It contains all of the players that have finished the race. The game keeps going until all players have finished.
 10. Send a `ready` event if you want to play again.
 
 ## Building

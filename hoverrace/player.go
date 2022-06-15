@@ -19,8 +19,6 @@ type Player struct {
 	ready bool
 
 	finished bool
-	place    int
-	duration int64
 
 	checkpoints []Vec
 
@@ -133,15 +131,16 @@ outer:
 
 	if len(p.checkpoints) == 0 && math.Abs(p.game.finishLine.Sub(p.pos).MagnitudeSquared()) <= 1 {
 		p.finished = true
-		p.game.finishedPlayers++
-		p.place = p.game.finishedPlayers
-		p.duration = time.Now().Sub(p.game.startTime).Milliseconds()
-		p.game.cg.Send(p.id, FinishedEvent, FinishedEventData{
-			Place:    p.place,
-			Duration: p.duration,
+		p.game.finishedPlayers = append(p.game.finishedPlayers, FinishedPlayer{
+			Id:       p.id,
+			Place:    len(p.game.finishedPlayers) + 1,
+			Duration: time.Now().Sub(p.game.startTime).Milliseconds(),
+		})
+		p.game.cg.Send(p.id, FinishedPlayersEvent, FinishedPlayersEventData{
+			Players: p.game.finishedPlayers,
 		})
 
-		if p.game.finishedPlayers == len(p.game.players) {
+		if len(p.game.finishedPlayers) == len(p.game.players) {
 			p.game.finish()
 		}
 	}

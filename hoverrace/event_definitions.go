@@ -9,6 +9,12 @@ const StartEvent cg.EventName = "start"
 type StartEventData struct {
 }
 
+// The `in_progress` event is sent to sockets which connect to the game while it's running.
+const InProgressEvent cg.EventName = "in_progress"
+
+type InProgressEventData struct {
+}
+
 // The `countdown` counts down from 5. When the value reaches 0 a `start` event will be sent instead of the `countdown` event.
 const CountdownEvent cg.EventName = "countdown"
 
@@ -62,14 +68,12 @@ type HovercraftsEventData struct {
 	Time int64 `json:"time"`
 }
 
-// The `finished` event is sent when a player crosses the finish line.
-const FinishedEvent cg.EventName = "finished"
+// The `finished_players` event contains a list of players that have finished the race.
+const FinishedPlayersEvent cg.EventName = "finished_players"
 
-type FinishedEventData struct {
-	// The place which the player has reached.
-	Place int `json:"place"`
-	// The amount of time in milliseconds the player needed to finish the race.
-	Duration int64 `json:"duration"`
+type FinishedPlayersEventData struct {
+	// A list of players that have finished the race sorted by their placement.
+	Players []FinishedPlayer `json:"players"`
 }
 
 // A hovercraft is a circle with a diameter of 1 unit.
@@ -84,6 +88,16 @@ type Hovercraft struct {
 	Angle float64 `json:"angle"`
 	// The amount of reached checkpoints.
 	Checkpoints int `json:"checkpoints"`
+}
+
+// `finished_player` represents an entry in the final ranking.
+type FinishedPlayer struct {
+	// The ID of the player.
+	Id string `json:"id"`
+	// The place, the player has reached.
+	Place int `json:"place"`
+	// The amount of time in milliseconds the player needed to finish the race.
+	Duration int64 `json:"duration"`
 }
 
 // One unit equals the width of the hovercrafts and checkpoints.

@@ -14,7 +14,7 @@ type Game struct {
 	hovercrafts     map[string]Hovercraft
 	checkpoints     []Vec
 	finishLine      Vec
-	finishedPlayers int
+	finishedPlayers []FinishedPlayer
 	running         bool
 	startTime       time.Time
 }
@@ -23,9 +23,11 @@ const targetFrameTime time.Duration = 1 * time.Second / 30
 
 func NewGame(cgGame *cg.Game) *Game {
 	game := &Game{
-		cg:          cgGame,
-		players:     make(map[string]*Player),
-		hovercrafts: make(map[string]Hovercraft),
+		cg:              cgGame,
+		players:         make(map[string]*Player),
+		hovercrafts:     make(map[string]Hovercraft),
+		finishedPlayers: make([]FinishedPlayer, 0),
+		checkpoints:     make([]Vec, 0, 10),
 	}
 	game.cg.OnPlayerJoined = game.onPlayerJoined
 	game.cg.OnPlayerLeft = game.onPlayerLeft
@@ -76,6 +78,18 @@ func (g *Game) onPlayerJoined(cgPlayer *cg.Player) {
 	g.hovercrafts[cgPlayer.Id] = Hovercraft{}
 
 	g.positionHovercrafts()
+
+	readyPlayers := make([]string, 0, len(g.players))
+	for _, p := range g.players {
+		if p.ready {
+			readyPlayers = append(readyPlayers, p.id)
+		}
+	}
+	if len(readyPlayers) > 0 {
+		cgPlayer.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
+			Players: readyPlayers,
+		})
+	}
 }
 
 func (g *Game) onPlayerLeft(player *cg.Player) {
@@ -93,7 +107,7 @@ func (g *Game) onPlayerLeft(player *cg.Player) {
 		}
 		g.start()
 	} else {
-		if g.finishedPlayers == len(g.players) {
+		if len(g.finishedPlayers) == len(g.players) {
 			g.finish()
 		}
 	}
@@ -102,15 +116,27 @@ func (g *Game) onPlayerLeft(player *cg.Player) {
 
 func (g *Game) onPlayerSocketConnected(player *cg.Player, socket *cg.Socket) {
 	if len(g.checkpoints) > 0 {
-		g.cg.Send("server", HovercraftsEvent, HovercraftsEventData{
+		socket.Send("server", HovercraftsEvent, HovercraftsEventData{
 			Hovercrafts: g.hovercrafts,
 			Time:        time.Now().UnixMilli(),
 		})
 
 		p := g.players[player.Id]
-		p.cg.Send("server", CheckpointsEvent, CheckpointsEventData{
+		socket.Send("server", CheckpointsEvent, CheckpointsEventData{
 			Checkpoints: p.checkpoints,
 			FinishLine:  g.finishLine,
+		})
+	}
+
+	readyPlayers := make([]string, 0, len(g.players))
+	for _, p := range g.players {
+		if p.ready {
+			readyPlayers = append(readyPlayers, p.id)
+		}
+	}
+	if len(readyPlayers) > 0 {
+		socket.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
+			Players: readyPlayers,
 		})
 	}
 
@@ -118,21 +144,18 @@ func (g *Game) onPlayerSocketConnected(player *cg.Player, socket *cg.Socket) {
 		return
 	}
 
-	socket.Send("server", StartEvent, StartEventData{})
+	socket.Send("server", InProgressEvent, InProgressEventData{})
 
-	for _, player := range g.players {
-		if player.finished {
-			socket.Send(player.id, FinishedEvent, FinishedEventData{
-				Place:    player.place,
-				Duration: player.duration,
-			})
-		}
+	if len(g.finishedPlayers) > 0 {
+		socket.Send("server", FinishedPlayersEvent, FinishedPlayersEventData{
+			Players: g.finishedPlayers,
+		})
 	}
 }
 
 func (g *Game) onSpectatorConnected(socket *cg.Socket) {
 	if len(g.checkpoints) > 0 {
-		g.cg.Send("server", HovercraftsEvent, HovercraftsEventData{
+		socket.Send("server", HovercraftsEvent, HovercraftsEventData{
 			Hovercrafts: g.hovercrafts,
 			Time:        time.Now().UnixMilli(),
 		})
@@ -143,19 +166,28 @@ func (g *Game) onSpectatorConnected(socket *cg.Socket) {
 		})
 	}
 
+	readyPlayers := make([]string, 0, len(g.players))
+	for _, p := range g.players {
+		if p.ready {
+			readyPlayers = append(readyPlayers, p.id)
+		}
+	}
+	if len(readyPlayers) > 0 {
+		socket.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
+			Players: readyPlayers,
+		})
+	}
+
 	if !g.running {
 		return
 	}
 
-	socket.Send("server", StartEvent, StartEventData{})
+	socket.Send("server", InProgressEvent, InProgressEventData{})
 
-	for _, player := range g.players {
-		if player.finished {
-			socket.Send(player.id, FinishedEvent, FinishedEventData{
-				Place:    player.place,
-				Duration: player.duration,
-			})
-		}
+	if len(g.finishedPlayers) > 0 {
+		socket.Send("server", FinishedPlayersEvent, FinishedPlayersEventData{
+			Players: g.finishedPlayers,
+		})
 	}
 }
 
@@ -201,7 +233,7 @@ func (g *Game) handleReady(playerId string) {
 		}
 	}
 
-	g.cg.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
+	g.cg.Send(playerId, ReadyPlayersEvent, ReadyPlayersEventData{
 		Players: readyPlayers,
 	})
 
@@ -232,7 +264,7 @@ func (g *Game) handleThrottle(playerId string, event cg.Event) {
 }
 
 func (g *Game) start() {
-	g.finishedPlayers = 0
+	g.finishedPlayers = g.finishedPlayers[:0]
 	g.createCheckpoints()
 
 	for _, player := range g.players {
@@ -289,11 +321,11 @@ func (g *Game) positionHovercrafts() {
 
 func (g *Game) finish() {
 	g.running = false
+	g.checkpoints = g.checkpoints[:0]
 }
 
 func (g *Game) createCheckpoints() {
-	g.checkpoints = make([]Vec, 10)
-
+	g.checkpoints = g.checkpoints[:cap(g.checkpoints)]
 	for i := range g.checkpoints {
 		g.checkpoints[i] = Vec{
 			X: rand.Float64()*50*2 - 50,
