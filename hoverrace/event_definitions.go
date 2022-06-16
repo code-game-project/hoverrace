@@ -45,6 +45,8 @@ const ReadyPlayersEvent cg.EventName = "ready_players"
 type ReadyPlayersEventData struct {
 	// A list of all ready players.
 	Players []string `json:"players"`
+	// True if all players in the game are ready.
+	Everyone bool `json:"everyone"`
 }
 
 // The `throttle` event allows you to change your throttle level and direction.

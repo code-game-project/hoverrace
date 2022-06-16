@@ -87,7 +87,8 @@ func (g *Game) onPlayerJoined(cgPlayer *cg.Player) {
 	}
 	if len(readyPlayers) > 0 {
 		cgPlayer.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
-			Players: readyPlayers,
+			Players:  readyPlayers,
+			Everyone: len(readyPlayers) == len(g.players),
 		})
 	}
 }
@@ -136,7 +137,8 @@ func (g *Game) onPlayerSocketConnected(player *cg.Player, socket *cg.Socket) {
 	}
 	if len(readyPlayers) > 0 {
 		socket.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
-			Players: readyPlayers,
+			Players:  readyPlayers,
+			Everyone: len(readyPlayers) == len(g.players),
 		})
 	}
 
@@ -174,7 +176,8 @@ func (g *Game) onSpectatorConnected(socket *cg.Socket) {
 	}
 	if len(readyPlayers) > 0 {
 		socket.Send("server", ReadyPlayersEvent, ReadyPlayersEventData{
-			Players: readyPlayers,
+			Players:  readyPlayers,
+			Everyone: len(readyPlayers) == len(g.players),
 		})
 	}
 
@@ -234,7 +237,8 @@ func (g *Game) handleReady(playerId string) {
 	}
 
 	g.cg.Send(playerId, ReadyPlayersEvent, ReadyPlayersEventData{
-		Players: readyPlayers,
+		Players:  readyPlayers,
+		Everyone: len(readyPlayers) == len(g.players),
 	})
 
 	if len(readyPlayers) == len(g.players) {

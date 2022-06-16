@@ -28,7 +28,9 @@ event ready {}
 // The `ready_players` event contains a list of all players which are ready.
 event ready_players {
 	// A list of all ready players.
-	players: list<string>
+	players: list<string>,
+	// True if all players in the game are ready.
+	everyone: bool
 }
 
 // The `throttle` event allows you to change your throttle level and direction.
