@@ -29,7 +29,7 @@ func NewGame(cgGame *cg.Game, config GameConfig) *Game {
 		players:         make(map[string]*Player),
 		hovercrafts:     make(map[string]Hovercraft),
 		finishedPlayers: make([]FinishedPlayer, 0),
-		checkpoints:     make([]Vec, 0, 10),
+		checkpoints:     make([]Vec, 0, config.CheckpointCount),
 	}
 	game.cg.OnPlayerJoined = game.onPlayerJoined
 	game.cg.OnPlayerLeft = game.onPlayerLeft

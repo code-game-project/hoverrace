@@ -44,11 +44,25 @@ func main() {
 	server.Run(func(cgGame *cg.Game, config json.RawMessage) {
 		var gameConfig hoverrace.GameConfig
 		err := json.Unmarshal(config, &gameConfig)
-		if err == nil {
-			cgGame.SetConfig(gameConfig)
-		} else {
+		if err != nil {
 			cgGame.Log.Error("Failed to unmarshal game config: %s", err)
 		}
+		if gameConfig.ThrottleSpeed <= 0 {
+			gameConfig.ThrottleSpeed = 1
+		}
+		if gameConfig.TurnSpeed <= 0 {
+			gameConfig.TurnSpeed = 220
+		}
+		if gameConfig.MaxAcceleration <= 0 {
+			gameConfig.MaxAcceleration = 5
+		}
+		if gameConfig.MaxVelocity <= 0 {
+			gameConfig.MaxVelocity = 20
+		}
+		if gameConfig.CheckpointCount <= 0 {
+			gameConfig.CheckpointCount = 10
+		}
+		cgGame.SetConfig(gameConfig)
 
 		hoverrace.NewGame(cgGame, gameConfig).Run()
 	})

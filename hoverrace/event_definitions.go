@@ -2,6 +2,19 @@ package hoverrace
 
 import "github.com/code-game-project/go-server/cg"
 
+type GameConfig struct {
+	// The speed at which the throttle reacts to user input. default = 1
+	ThrottleSpeed float64 `json:"throttle_speed"`
+	// The speed at which hovercrafts turn. default = 220
+	TurnSpeed float64 `json:"turn_speed"`
+	// The maximum acceleration of hovercrafts. default = 5
+	MaxAcceleration float64 `json:"max_acceleration"`
+	// The maximum velocity of hovercrafts. default = 20
+	MaxVelocity float64 `json:"max_velocity"`
+	// The amount of checkpoints per game. default = 10
+	CheckpointCount int `json:"checkpoint_count"`
+}
+
 // Send the `ready` command to the server when you think the game should begin.
 const ReadyCmd cg.CommandName = "ready"
 
@@ -106,5 +119,3 @@ type Vec struct {
 	// bottom to top
 	Y float64 `json:"y"`
 }
-
-type GameConfig struct{}

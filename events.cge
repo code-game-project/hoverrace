@@ -1,6 +1,19 @@
 name hoverrace
 version 0.4
 
+config {
+	// The speed at which the throttle reacts to user input. default = 1
+	throttle_speed: float,
+	// The speed at which hovercrafts turn. default = 220
+	turn_speed: float,
+	// The maximum acceleration of hovercrafts. default = 5
+	max_acceleration: float,
+	// The maximum velocity of hovercrafts. default = 20
+	max_velocity: float,
+	// The amount of checkpoints per game. default = 10
+	checkpoint_count: int
+}
+
 // Send the `ready` command to the server when you think the game should begin.
 command ready {}
 

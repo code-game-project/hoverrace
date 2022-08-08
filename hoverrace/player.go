@@ -7,13 +7,6 @@ import (
 	"github.com/code-game-project/go-server/cg"
 )
 
-const (
-	throttleSpeed   = 1
-	turnSpeed       = 220
-	maxAcceleration = 5
-	maxVelocity     = 20
-)
-
 type Player struct {
 	id       string
 	username string
@@ -59,30 +52,30 @@ func (p *Player) update(delta time.Duration) {
 func (p *Player) move(delta time.Duration) {
 	if !p.finished && p.game.running {
 		if p.targetThrottle > p.throttle {
-			p.throttle += throttleSpeed * delta.Seconds()
+			p.throttle += p.game.config.ThrottleSpeed * delta.Seconds()
 			if p.throttle > p.targetThrottle {
 				p.throttle = p.targetThrottle
 			}
 		} else if p.targetThrottle < p.throttle {
-			p.throttle -= throttleSpeed * delta.Seconds()
+			p.throttle -= p.game.config.ThrottleSpeed * delta.Seconds()
 			if p.throttle < p.targetThrottle {
 				p.throttle = p.targetThrottle
 			}
 		}
 
 		if p.targetAngle > p.angle {
-			p.angle += turnSpeed * delta.Seconds()
+			p.angle += p.game.config.TurnSpeed * delta.Seconds()
 			if p.angle > p.targetAngle {
 				p.angle = p.targetAngle
 			}
 		} else if p.targetAngle < p.angle {
-			p.angle -= turnSpeed * delta.Seconds()
+			p.angle -= p.game.config.TurnSpeed * delta.Seconds()
 			if p.angle < p.targetAngle {
 				p.angle = p.targetAngle
 			}
 		}
 
-		p.acc = VecFromAngle(p.angle).Mul(maxAcceleration * p.throttle)
+		p.acc = VecFromAngle(p.angle).Mul(p.game.config.MaxAcceleration * p.throttle)
 	} else {
 		p.throttle = 0
 
@@ -92,7 +85,7 @@ func (p *Player) move(delta time.Duration) {
 			p.acc = Vec{
 				X: -p.vel.X / velMag,
 				Y: -p.vel.Y / velMag,
-			}.Mul(math.Min(maxAcceleration, math.Abs(velMag)))
+			}.Mul(math.Min(p.game.config.MaxAcceleration, math.Abs(velMag)))
 		}
 
 		if p.vel.MagnitudeSquared() < 0.01 {
@@ -136,7 +129,7 @@ outer:
 		p.game.finishedPlayers = append(p.game.finishedPlayers, FinishedPlayer{
 			Id:       p.id,
 			Place:    len(p.game.finishedPlayers) + 1,
-			Duration: time.Now().Sub(p.game.startTime).Milliseconds(),
+			Duration: time.Since(p.game.startTime).Milliseconds(),
 		})
 		p.game.cg.Send(FinishedPlayersEvent, FinishedPlayersEventData{
 			Players: p.game.finishedPlayers,
