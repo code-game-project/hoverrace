@@ -12,7 +12,7 @@ COPY . .
 RUN go build -v -o /usr/local/bin ./...
 
 # Switch to a low-privileged user
-RUN adduser --no-create-home go --shell /bin/sh && chown -R go:go /usr/local/bin/hoverrace
+RUN adduser --no-create-home go --shell /bin/sh && chown -R go:go /usr/local/bin
 USER go
 
 # Expose the port

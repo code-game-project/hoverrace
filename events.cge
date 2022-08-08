@@ -1,5 +1,17 @@
 name hoverrace
-version 0.3
+version 0.4
+
+// Send the `ready` command to the server when you think the game should begin.
+command ready {}
+
+// The `throttle` command allows you to change your throttle level and direction.
+// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
+command throttle {
+	// Throttle level between -1 - 1.
+	level: float,
+	// The angle in degrees the hovercraft should be facing (up = 0°).
+	angle: float
+}
 
 // The `start` event is sent when the race begins.
 // The game begins once at least 2 players have joined and all players have sent the `ready` event.
@@ -22,24 +34,12 @@ event checkpoints {
 	finish_line: vec
 }
 
-// Send the `ready` event to the server when you think the game should begin.
-event ready {}
-
 // The `ready_players` event contains a list of all players which are ready.
 event ready_players {
 	// A list of all ready players.
 	players: list<string>,
 	// True if all players in the game are ready.
 	everyone: bool
-}
-
-// The `throttle` event allows you to change your throttle level and direction.
-// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
-event throttle {
-	// Throttle level between -1 - 1.
-	level: float,
-	// The angle in degrees the hovercraft should be facing (up = 0°).
-	angle: float
 }
 
 // The `hovercraft` event tells all clients where all the hovercrafts are and how they are moving.

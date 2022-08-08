@@ -2,18 +2,32 @@ package hoverrace
 
 import "github.com/code-game-project/go-server/cg"
 
+// Send the `ready` command to the server when you think the game should begin.
+const ReadyCmd cg.CommandName = "ready"
+
+type ReadyCmdData struct{}
+
+// The `throttle` command allows you to change your throttle level and direction.
+// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
+const ThrottleCmd cg.CommandName = "throttle"
+
+type ThrottleCmdData struct {
+	// Throttle level between -1 - 1.
+	Level float64 `json:"level"`
+	// The angle in degrees the hovercraft should be facing (up = 0°).
+	Angle float64 `json:"angle"`
+}
+
 // The `start` event is sent when the race begins.
 // The game begins once at least 2 players have joined and all players have sent the `ready` event.
 const StartEvent cg.EventName = "start"
 
-type StartEventData struct {
-}
+type StartEventData struct{}
 
 // The `in_progress` event is sent to sockets which connect to the game while it's running.
 const InProgressEvent cg.EventName = "in_progress"
 
-type InProgressEventData struct {
-}
+type InProgressEventData struct{}
 
 // The `countdown` counts down from 5. When the value reaches 0 a `start` event will be sent instead of the `countdown` event.
 const CountdownEvent cg.EventName = "countdown"
@@ -33,12 +47,6 @@ type CheckpointsEventData struct {
 	FinishLine Vec `json:"finish_line"`
 }
 
-// Send the `ready` event to the server when you think the game should begin.
-const ReadyEvent cg.EventName = "ready"
-
-type ReadyEventData struct {
-}
-
 // The `ready_players` event contains a list of all players which are ready.
 const ReadyPlayersEvent cg.EventName = "ready_players"
 
@@ -47,17 +55,6 @@ type ReadyPlayersEventData struct {
 	Players []string `json:"players"`
 	// True if all players in the game are ready.
 	Everyone bool `json:"everyone"`
-}
-
-// The `throttle` event allows you to change your throttle level and direction.
-// **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
-const ThrottleEvent cg.EventName = "throttle"
-
-type ThrottleEventData struct {
-	// Throttle level between -1 - 1.
-	Level float64 `json:"level"`
-	// The angle in degrees the hovercraft should be facing (up = 0°).
-	Angle float64 `json:"angle"`
 }
 
 // The `hovercraft` event tells all clients where all the hovercrafts are and how they are moving.
@@ -109,3 +106,5 @@ type Vec struct {
 	// bottom to top
 	Y float64 `json:"y"`
 }
+
+type GameConfig struct{}

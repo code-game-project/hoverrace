@@ -57,7 +57,7 @@ docker run -d -p <port-on-host-machine>:8080 --name hoverrace codegameproject/ho
 ```sh
 git clone https://github.com/code-game-project/hoverrace.git
 cd hoverrace
-go build .
+codegame build
 ```
 ## License
 

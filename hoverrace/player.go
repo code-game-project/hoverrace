@@ -7,10 +7,12 @@ import (
 	"github.com/code-game-project/go-server/cg"
 )
 
-const throttleSpeed = 1
-const turnSpeed = 220
-const maxAcceleration = 5
-const maxVelocity = 20
+const (
+	throttleSpeed   = 1
+	turnSpeed       = 220
+	maxAcceleration = 5
+	maxVelocity     = 20
+)
 
 type Player struct {
 	id       string
@@ -120,7 +122,7 @@ outer:
 			p.checkpoints[i] = p.checkpoints[len(p.checkpoints)-1]
 			p.checkpoints = p.checkpoints[:len(p.checkpoints)-1]
 
-			p.cg.Send("server", CheckpointsEvent, CheckpointsEventData{
+			p.cg.Send(CheckpointsEvent, CheckpointsEventData{
 				Checkpoints: p.checkpoints,
 				FinishLine:  p.game.finishLine,
 			})
@@ -136,7 +138,7 @@ outer:
 			Place:    len(p.game.finishedPlayers) + 1,
 			Duration: time.Now().Sub(p.game.startTime).Milliseconds(),
 		})
-		p.game.cg.Send(p.id, FinishedPlayersEvent, FinishedPlayersEventData{
+		p.game.cg.Send(FinishedPlayersEvent, FinishedPlayersEventData{
 			Players: p.game.finishedPlayers,
 		})
 
