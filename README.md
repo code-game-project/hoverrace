@@ -11,14 +11,14 @@ Race against other hovercrafts from checkpoint to checkpoint.
 ## Usage
 
 ```sh
-# Run on default port 80
+# Run on default port 8080
 hoverrace
 
 # Specify a custom port
-hoverrace --port=8080
+hoverrace --port=5000
 
 ## Specify a custom port through an environment variable
-CG_PORT=8080 hoverrace
+CG_PORT=5000 hoverrace
 ```
 
 ### Running with Docker

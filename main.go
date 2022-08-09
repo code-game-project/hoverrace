@@ -25,7 +25,7 @@ func main() {
 	}
 
 	if port == 0 {
-		port = 80
+		port = 8080
 	}
 
 	server := cg.NewServer("hoverrace", cg.ServerConfig{
