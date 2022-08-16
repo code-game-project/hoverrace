@@ -12,7 +12,7 @@ config {
 	max_velocity: float,
 	// The amount of checkpoints per game. default = 10
 	checkpoint_count: int,
-	// The time in milliseconds that a game is allowed to last. default = infinite
+	// The time in seconds that a game is allowed to last. default = infinite
 	timeout: int
 }
 
@@ -71,8 +71,8 @@ event finished_players {
 	players: list<finished_player>
 }
 
-// The `game_over` event is sent when all players finished the game or the time runs out.
-event game_over {
+// The `race_over` event is sent when all players finished the game or the time runs out.
+event race_over {
 	// The players that have finished the game before the time ran out.
 	finished_players: list<finished_player>,
 	// The IDs of the players that have not finished the game before the time ran out.

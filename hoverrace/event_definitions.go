@@ -13,7 +13,7 @@ type GameConfig struct {
 	MaxVelocity float64 `json:"max_velocity"`
 	// The amount of checkpoints per game. default = 10
 	CheckpointCount int `json:"checkpoint_count"`
-	// The time in milliseconds that a game is allowed to last. default = infinite
+	// The time in seconds that a game is allowed to last. default = infinite
 	Timeout int `json:"timeout"`
 }
 
@@ -93,10 +93,10 @@ type FinishedPlayersEventData struct {
 	Players []FinishedPlayer `json:"players"`
 }
 
-// The `game_over` event is sent when all players finished the game or the time runs out.
-const GameOverEvent cg.EventName = "game_over"
+// The `race_over` event is sent when all players finished the game or the time runs out.
+const RaceOverEvent cg.EventName = "race_over"
 
-type GameOverEventData struct {
+type RaceOverEventData struct {
 	// The players that have finished the game before the time ran out.
 	FinishedPlayers []FinishedPlayer `json:"finished_players"`
 	// The IDs of the players that have not finished the game before the time ran out.

@@ -50,10 +50,10 @@ func (g *Game) Run() {
 			g.handleCommand(cmd.Origin, cmd.Cmd)
 		}
 		g.update(deltaTime)
-		time.Sleep(targetFrameTime - time.Now().Sub(frameStart))
+		time.Sleep(targetFrameTime - time.Since(frameStart))
+		deltaTime = time.Since(frameStart)
 
-		deltaTime = time.Now().Sub(frameStart)
-		// waited for countdown
+		// correct time after waiting for countdown
 		if deltaTime >= 5*time.Second {
 			deltaTime = targetFrameTime
 		}
@@ -204,6 +204,10 @@ func (g *Game) update(delta time.Duration) {
 		Hovercrafts: g.hovercrafts,
 		Time:        time.Now().UnixMilli(),
 	})
+
+	if g.running && g.config.Timeout > 0 && time.Since(g.startTime) > time.Duration(g.config.Timeout)*time.Second {
+		g.finish()
+	}
 }
 
 func (g *Game) handleCommand(origin *cg.Player, cmd cg.Command) {
@@ -320,6 +324,17 @@ func (g *Game) positionHovercrafts() {
 }
 
 func (g *Game) finish() {
+	unfinishedPlayers := make([]string, 0)
+	for _, p := range g.players {
+		if !p.finished {
+			unfinishedPlayers = append(unfinishedPlayers, p.id)
+		}
+		p.finished = true
+	}
+	g.cg.Send(RaceOverEvent, RaceOverEventData{
+		FinishedPlayers:   g.finishedPlayers,
+		UnfinishedPlayers: unfinishedPlayers,
+	})
 	g.running = false
 	g.checkpoints = g.checkpoints[:0]
 }
