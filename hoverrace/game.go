@@ -98,6 +98,9 @@ func (g *Game) onPlayerLeft(player *cg.Player) {
 		return
 	}
 
+	delete(g.players, player.Id)
+	delete(g.hovercrafts, player.Id)
+
 	if !g.running {
 		g.positionHovercrafts()
 		for _, p := range g.players {
@@ -207,8 +210,8 @@ func (g *Game) handleCommand(origin *cg.Player, cmd cg.Command) {
 	switch cmd.Name {
 	case ReadyCmd:
 		g.handleReady(origin.Id)
-	case ThrottleCmd:
-		g.handleThrottle(origin.Id, cmd)
+	case ControlCmd:
+		g.handleControl(origin.Id, cmd)
 	default:
 		origin.Log.ErrorData(cmd, fmt.Sprintf("unexpected command: %s", cmd.Name))
 	}
@@ -239,24 +242,24 @@ func (g *Game) handleReady(playerId string) {
 	}
 }
 
-func (g *Game) handleThrottle(playerId string, cmd cg.Command) {
+func (g *Game) handleControl(playerId string, cmd cg.Command) {
 	if !g.running {
 		return
 	}
 
-	var data ThrottleCmdData
+	var data ControlCmdData
 	cmd.UnmarshalData(&data)
 
-	if data.Level > 1 {
-		data.Level = 1
-	} else if data.Level < -1 {
-		data.Level = -1
+	if data.Thrust > 1 {
+		data.Thrust = 1
+	} else if data.Thrust < -1 {
+		data.Thrust = -1
 	}
 
 	data.Angle = NormalizeAngle(data.Angle)
 
 	player := g.players[playerId]
-	player.targetThrottle = data.Level
+	player.targetThrust = data.Thrust
 	player.targetAngle = data.Angle
 }
 
@@ -270,8 +273,8 @@ func (g *Game) start() {
 		player.acc = Vec{}
 		player.angle = 0
 		player.targetAngle = 0
-		player.throttle = 0
-		player.targetThrottle = 0
+		player.thrust = 0
+		player.targetThrust = 0
 
 		player.finished = false
 		player.checkpoints = make([]Vec, len(g.checkpoints))

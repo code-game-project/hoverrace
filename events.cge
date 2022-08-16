@@ -2,7 +2,7 @@ name hoverrace
 version 0.4
 
 config {
-	// The speed at which the throttle reacts to user input. default = 1
+	// The speed at which the thrust level reacts to user input. default = 1
 	throttle_speed: float,
 	// The speed at which hovercrafts turn. default = 220
 	turn_speed: float,
@@ -11,18 +11,20 @@ config {
 	// The maximum velocity of hovercrafts. default = 20
 	max_velocity: float,
 	// The amount of checkpoints per game. default = 10
-	checkpoint_count: int
+	checkpoint_count: int,
+	// The time in milliseconds that a game is allowed to last. default = infinite
+	timeout: int
 }
 
 // Send the `ready` command to the server when you think the game should begin.
 command ready {}
 
-// The `throttle` command allows you to change your throttle level and direction.
+// The `control` command allows you to change your throttle level and direction.
 // **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
-command throttle {
-	// Throttle level between -1 - 1.
-	level: float,
-	// The angle in degrees the hovercraft should be facing (up = 0°).
+command control {
+	// Thrust level between -1 and 1.
+	thrust: float,
+	// The angle in degrees the hovercraft should be facing (right = 0°).
 	angle: float
 }
 
@@ -69,14 +71,22 @@ event finished_players {
 	players: list<finished_player>
 }
 
+// The `game_over` event is sent when all players finished the game or the time runs out.
+event game_over {
+	// The players that have finished the game before the time ran out.
+	finished_players: list<finished_player>,
+	// The IDs of the players that have not finished the game before the time ran out.
+	unfinished_players: list<string>
+}
+
 // A hovercraft is a circle with a diameter of 1 unit.
 type hovercraft {
 	// The position of the center of the hovercraft.
 	pos: vec,
 	// The current velocity of the hovercraft.
 	velocity: vec,
-	// The current throttle of the hovercraft.
-	throttle: float64,
+	// The current thrust level of the hovercraft.
+	thrust: float64,
 	// The angle in degrees the hovercraft is facing (up = 0°).
 	angle: float,
 	// The amount of reached checkpoints.

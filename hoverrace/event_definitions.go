@@ -3,7 +3,7 @@ package hoverrace
 import "github.com/code-game-project/go-server/cg"
 
 type GameConfig struct {
-	// The speed at which the throttle reacts to user input. default = 1
+	// The speed at which the thrust level reacts to user input. default = 1
 	ThrottleSpeed float64 `json:"throttle_speed"`
 	// The speed at which hovercrafts turn. default = 220
 	TurnSpeed float64 `json:"turn_speed"`
@@ -13,21 +13,24 @@ type GameConfig struct {
 	MaxVelocity float64 `json:"max_velocity"`
 	// The amount of checkpoints per game. default = 10
 	CheckpointCount int `json:"checkpoint_count"`
+	// The time in milliseconds that a game is allowed to last. default = infinite
+	Timeout int `json:"timeout"`
 }
 
 // Send the `ready` command to the server when you think the game should begin.
 const ReadyCmd cg.CommandName = "ready"
 
-type ReadyCmdData struct{}
+type ReadyCmdData struct {
+}
 
-// The `throttle` command allows you to change your throttle level and direction.
+// The `control` command allows you to change your throttle level and direction.
 // **NOTE:** These values are targets. The hovercraft needs some time to reach the desired values.
-const ThrottleCmd cg.CommandName = "throttle"
+const ControlCmd cg.CommandName = "control"
 
-type ThrottleCmdData struct {
-	// Throttle level between -1 - 1.
-	Level float64 `json:"level"`
-	// The angle in degrees the hovercraft should be facing (up = 0°).
+type ControlCmdData struct {
+	// Thrust level between -1 and 1.
+	Thrust float64 `json:"thrust"`
+	// The angle in degrees the hovercraft should be facing (right = 0°).
 	Angle float64 `json:"angle"`
 }
 
@@ -35,12 +38,14 @@ type ThrottleCmdData struct {
 // The game begins once at least 2 players have joined and all players have sent the `ready` event.
 const StartEvent cg.EventName = "start"
 
-type StartEventData struct{}
+type StartEventData struct {
+}
 
 // The `in_progress` event is sent to sockets which connect to the game while it's running.
 const InProgressEvent cg.EventName = "in_progress"
 
-type InProgressEventData struct{}
+type InProgressEventData struct {
+}
 
 // The `countdown` counts down from 5. When the value reaches 0 a `start` event will be sent instead of the `countdown` event.
 const CountdownEvent cg.EventName = "countdown"
@@ -88,14 +93,24 @@ type FinishedPlayersEventData struct {
 	Players []FinishedPlayer `json:"players"`
 }
 
+// The `game_over` event is sent when all players finished the game or the time runs out.
+const GameOverEvent cg.EventName = "game_over"
+
+type GameOverEventData struct {
+	// The players that have finished the game before the time ran out.
+	FinishedPlayers []FinishedPlayer `json:"finished_players"`
+	// The IDs of the players that have not finished the game before the time ran out.
+	UnfinishedPlayers []string `json:"unfinished_players"`
+}
+
 // A hovercraft is a circle with a diameter of 1 unit.
 type Hovercraft struct {
 	// The position of the center of the hovercraft.
 	Pos Vec `json:"pos"`
 	// The current velocity of the hovercraft.
 	Velocity Vec `json:"velocity"`
-	// The current throttle of the hovercraft.
-	Throttle float64 `json:"throttle"`
+	// The current thrust level of the hovercraft.
+	Thrust float64 `json:"thrust"`
 	// The angle in degrees the hovercraft is facing (up = 0°).
 	Angle float64 `json:"angle"`
 	// The amount of reached checkpoints.

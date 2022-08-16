@@ -17,8 +17,8 @@ type Player struct {
 
 	checkpoints []Vec
 
-	throttle       float64
-	targetThrottle float64
+	thrust       float64
+	targetThrust float64
 
 	angle       float64
 	targetAngle float64
@@ -43,7 +43,7 @@ func (p *Player) update(delta time.Duration) {
 			Pos:         p.pos,
 			Checkpoints: len(p.checkpoints),
 			Velocity:    p.vel,
-			Throttle:    p.throttle,
+			Thrust:      p.thrust,
 			Angle:       p.angle,
 		}
 	}
@@ -51,15 +51,15 @@ func (p *Player) update(delta time.Duration) {
 
 func (p *Player) move(delta time.Duration) {
 	if !p.finished && p.game.running {
-		if p.targetThrottle > p.throttle {
-			p.throttle += p.game.config.ThrottleSpeed * delta.Seconds()
-			if p.throttle > p.targetThrottle {
-				p.throttle = p.targetThrottle
+		if p.targetThrust > p.thrust {
+			p.thrust += p.game.config.ThrottleSpeed * delta.Seconds()
+			if p.thrust > p.targetThrust {
+				p.thrust = p.targetThrust
 			}
-		} else if p.targetThrottle < p.throttle {
-			p.throttle -= p.game.config.ThrottleSpeed * delta.Seconds()
-			if p.throttle < p.targetThrottle {
-				p.throttle = p.targetThrottle
+		} else if p.targetThrust < p.thrust {
+			p.thrust -= p.game.config.ThrottleSpeed * delta.Seconds()
+			if p.thrust < p.targetThrust {
+				p.thrust = p.targetThrust
 			}
 		}
 
@@ -75,9 +75,9 @@ func (p *Player) move(delta time.Duration) {
 			}
 		}
 
-		p.acc = VecFromAngle(p.angle).Mul(p.game.config.MaxAcceleration * p.throttle)
+		p.acc = VecFromAngle(p.angle).Mul(p.game.config.MaxAcceleration * p.thrust)
 	} else {
-		p.throttle = 0
+		p.thrust = 0
 
 		if p.vel.MagnitudeSquared() != 0 {
 			velMag := p.vel.Magnitude()
