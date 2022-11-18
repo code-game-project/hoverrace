@@ -74,6 +74,7 @@ func (p *Player) move(delta time.Duration) {
 				p.angle = p.targetAngle
 			}
 		}
+		p.angle = NormalizeAngle(p.angle)
 
 		p.acc = VecFromAngle(p.angle).Mul(p.game.config.MaxAcceleration * p.thrust)
 	} else {

@@ -24,7 +24,7 @@ command ready {}
 command control {
 	// Thrust level between -1 and 1.
 	thrust: float,
-	// The angle in degrees the hovercraft should be facing (right = 0°).
+	// The angle in degrees the hovercraft should be facing (right = 0°, up = 90°, left = 180°, down = -90°).
 	angle: float
 }
 
@@ -87,7 +87,7 @@ type hovercraft {
 	velocity: vec,
 	// The current thrust level of the hovercraft.
 	thrust: float64,
-	// The angle in degrees the hovercraft is facing (up = 0°).
+	// The angle in degrees the hovercraft is facing (right = 0°, up = 90°, left = 180°, down = -90°).
 	angle: float,
 	// The amount of reached checkpoints.
 	checkpoints: int

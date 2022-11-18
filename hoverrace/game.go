@@ -314,6 +314,7 @@ func (g *Game) positionHovercrafts() {
 			X: x,
 			Y: 0,
 		}
+		player.angle = 0
 		if i%2 != 0 {
 			player.pos.X = -x
 		} else {

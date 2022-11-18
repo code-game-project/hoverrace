@@ -32,7 +32,7 @@ func (v Vec) Normalize() Vec {
 }
 
 func (v Vec) ToAngle() float64 {
-	return math.Atan2(-v.Y, v.X)*180/math.Pi + 90
+	return math.Atan2(v.Y, v.X) * 180 / math.Pi
 }
 
 func (v Vec) Magnitude() float64 {
@@ -44,9 +44,9 @@ func (v Vec) MagnitudeSquared() float64 {
 }
 
 func VecFromAngle(degrees float64) Vec {
-	radians := ToRadians(degrees + 90)
+	radians := ToRadians(degrees)
 	return Vec{
-		X: -math.Cos(radians),
+		X: math.Cos(radians),
 		Y: math.Sin(radians),
 	}
 }

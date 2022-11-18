@@ -30,7 +30,7 @@ const ControlCmd cg.CommandName = "control"
 type ControlCmdData struct {
 	// Thrust level between -1 and 1.
 	Thrust float64 `json:"thrust"`
-	// The angle in degrees the hovercraft should be facing (right = 0°).
+	// The angle in degrees the hovercraft should be facing (right = 0°, up = 90°, left = 180°, down = -90°).
 	Angle float64 `json:"angle"`
 }
 
@@ -111,7 +111,7 @@ type Hovercraft struct {
 	Velocity Vec `json:"velocity"`
 	// The current thrust level of the hovercraft.
 	Thrust float64 `json:"thrust"`
-	// The angle in degrees the hovercraft is facing (up = 0°).
+	// The angle in degrees the hovercraft is facing (right = 0°, up = 90°, left = 180°, down = -90°).
 	Angle float64 `json:"angle"`
 	// The amount of reached checkpoints.
 	Checkpoints int `json:"checkpoints"`
