@@ -28,24 +28,24 @@ Prerequisites:
 
 ```sh
 # Download image
-docker pull codegameproject/hoverrace:0.3
+docker pull codegameproject/hoverrace:0.4
 
 # Run container
-docker run -d --restart on-failure -p <port-on-host-machine>:8080 --name hoverrace codegameproject/hoverrace:0.3
+docker run -d --restart on-failure -p <port-on-host-machine>:8080 --name hoverrace codegameproject/hoverrace:0.4
 ```
 
 ## Event Flow
 
-1. Send a `ready` event to the server when you think the game should begin.
-2. The `ready_players` event updates all players on the readiness of all players.
+1. Send the `ready` command to the server when you think the game should begin.
+2. The `ready_players` event updates every player on the readiness of all players.
 3. The `checkpoints` event contains all checkpoints and the finish line position.
 4. The `countdown` event counts down 5 seconds.
-5. The `start` event is sent to all players when the race begins.
-6. Send a `throttle` event to begin moving.
-7. The `hovercrafts` event is sent repeatedly to all players to update them on the state of all hovercrafts.
+5. The `start` event is sent to every player when the race begins.
+6. Send the `control` command to set the target thrust and angle of your hovercraft.
+7. The `hovercrafts` event is sent repeatedly to every player to update them on the state of all hovercrafts.
 8. The `checkpoints` event is sent again when you cross a checkpoint.
-9. The `finished_players` event is sent to all players when a player crosses the finish line. It contains all of the players that have finished the race. The game keeps going until all players have finished.
-10. Send a `ready` event if you want to play again.
+9. The `finished_players` event is sent to all players when a player crosses the finish line. It contains all of the players that have finished the race. The game keeps going until all players have finished or the optional time limit is reached.
+10. Send the `ready` event if you want to play again.
 
 ## Building
 
@@ -60,7 +60,7 @@ codegame build
 ```
 ## License
 
-Copyright (C) 2022 Julian Hofmann
+Copyright (C) 2022-2023 Julian Hofmann
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published

@@ -31,7 +31,7 @@ func main() {
 	server := cg.NewServer("hoverrace", cg.ServerConfig{
 		DisplayName:             "Hover Race",
 		Description:             "Race against other hovercrafts from checkpoint to checkpoint.",
-		Version:                 "0.3",
+		Version:                 "0.4",
 		RepositoryURL:           "https://github.com/code-game-project/hoverrace",
 		WebsocketTimeout:        1 * time.Minute,
 		MaxPlayersPerGame:       10,
