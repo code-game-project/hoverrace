@@ -39,9 +39,14 @@ func (p *Player) update(delta time.Duration) {
 		p.move(delta)
 		p.checkCollisions()
 
+		var checkpoints int
+		if p.game.running {
+			checkpoints = p.game.config.CheckpointCount - len(p.checkpoints)
+		}
+
 		p.game.hovercrafts[p.id] = Hovercraft{
 			Pos:         p.pos,
-			Checkpoints: len(p.checkpoints),
+			Checkpoints: checkpoints,
 			Velocity:    p.vel,
 			Thrust:      p.thrust,
 			Angle:       p.angle,
